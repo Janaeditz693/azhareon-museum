@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Azhareon • Museum of Timecrafted Beauty</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Azhareon — a premium digital museum showcasing retro cars, bikes, paintings, Egyptian arts, contemporary art, rare books, and stones."
+  />
+
+  <!-- Premium fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/static/styles.css">
+<script src="/static/script.js"></script>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header class="nav">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <span class="brand-mark">AZHAREON</span>
+        <span class="brand-sub">Museum of Timecrafted Beauty</span>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#hero">Home</a>
+        <a href="#collections">Collections</a>
+        <a href="#signature">Signature Piece</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE DRAWER -->
+  <div class="drawer" id="drawer">
+    <a href="#hero">Home</a>
+    <a href="#collections">Collections</a>
+    <a href="#signature">Signature Piece</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero" class="hero">
+    <div class="hero-media">
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="hero-content container reveal">
+      <p class="hero-kicker">Curated Rarities • Digital Museum</p>
+      <h1 class="hero-title">Where Time is<br />Treated Like a Luxury Material.</h1>
+      <p class="hero-subtitle">
+        Azhareon weaves together retro machines, fine art, Egyptian relics, rare books,
+        and stones into one quietly opulent experience.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn-primary" id="heroExplore">Explore Collections</button>
+        <button class="btn-outline" id="heroAbout">Our Story</button>
+      </div>
+
+      <div class="hero-meta">
+        <div>
+          <span class="hero-stat-label">Curated Eras</span>
+          <span class="hero-stat-value">Ancient – Modern</span>
+        </div>
+        <div>
+          <span class="hero-stat-label">Categories</span>
+          <span class="hero-stat-value">Machines • Art • Relics • Books • Stones</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLECTIONS -->
+  <section id="collections" class="section section-dark">
+    <div class="container reveal">
+      <div class="section-head">
+        <p class="eyebrow">Collections</p>
+        <h2 class="section-title">A House of Quiet Obsessions.</h2>
+        <p class="section-copy">
+          Each collection is treated like a private vault — meticulously arranged, softly lit,
+          and documented with reverence.
+        </p>
+      </div>
+
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <button class="chip chip-active" data-filter="all">All</button>
+        <button class="chip" data-filter="machines">Retro Machines</button>
+        <button class="chip" data-filter="art">Art & Paintings</button>
+        <button class="chip" data-filter="ancient">Ancient & Egyptian</button>
+        <button class="chip" data-filter="books">Books & Manuscripts</button>
+        <button class="chip" data-filter="stones">Stones & Fossils</button>
+      </div>
+
+      <!-- GRID -->
+      <div id="collectionGrid" class="grid"></div>
+    </div>
+  </section>
+
+  <!-- SIGNATURE PIECE (CAROUSEL-LIKE) -->
+  <section id="signature" class="section section-light">
+    <div class="container signature">
+      <div class="signature-text reveal">
+        <p class="eyebrow">Signature Piece</p>
+        <h2 class="section-title">The 1968 Midnight Allegro.</h2>
+        <p class="section-copy">
+          A one-of-one retro grand tourer, restored with obsessive detail.
+          Leather that carries the weight of decades. Chrome that reflects
+          entire eras. A machine that behaves more like a time capsule.
+        </p>
+        <ul class="spec-list">
+          <li><span>Era</span><strong>Late 1960s</strong></li>
+          <li><span>Origin</span><strong>European Coachbuilt</strong></li>
+          <li><span>Condition</span><strong>Concours-Level Restoration</strong></li>
+          <li><span>Category</span><strong>Retro Machine / Hero Exhibit</strong></li>
+        </ul>
+      </div>
+
+      <div class="signature-media reveal">
+        <div class="sig-carousel">
+          <div class="sig-slide sig-slide-active"></div>
+          <div class="sig-slide"></div>
+          <div class="sig-slide"></div>
+        </div>
+        <div class="sig-dots">
+          <button class="dot dot-active" data-slide="0"></button>
+          <button class="dot" data-slide="1"></button>
+          <button class="dot" data-slide="2"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section section-ink">
+    <div class="container about">
+      <div class="about-main reveal">
+        <p class="eyebrow">The Philosophy</p>
+        <h2 class="section-title">Less Noise. More Reverence.</h2>
+        <p class="section-copy">
+          Azhareon is inspired by watch ateliers, heritage coachbuilders, and quiet high-end boutiques.
+          The interface is deliberately calm: deep blacks, soft gold, a slow pace. Every object is
+          given room to breathe.
+        </p>
+
+        <div class="tabs">
+          <button class="tab tab-active" data-tab="design">Design</button>
+          <button class="tab" data-tab="curation">Curation</button>
+          <button class="tab" data-tab="future">Future</button>
+        </div>
+
+        <div class="tab-panels">
+          <div class="tab-panel tab-panel-active" data-panel="design">
+            <p>
+              The visual language uses a restrained palette — obsidian black,
+              muted gold, and ivory — echoing premium horology and automotive brands.
+              Typography relies on serif headlines and clean sans-serif body copy to
+              balance heritage with clarity.
+            </p>
+          </div>
+          <div class="tab-panel" data-panel="curation">
+            <p>
+              Collections are grouped by emotion and era, not only by type. A retro car
+              might sit spiritually next to a mid-century painting or an industrial gauge —
+              because they share a common feeling of crafted time.
+            </p>
+          </div>
+          <div class="tab-panel" data-panel="future">
+            <p>
+              Azhareon is designed to grow into a full digital museum: backed by a database,
+              advanced search, private viewing rooms, and memberships. Today, it is a concept.
+              Tomorrow, it can be a destination.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-aside reveal">
+        <div class="stat-card">
+          <span class="stat-label">Primary Palette</span>
+          <div class="swatches">
+            <div class="swatch swatch-black"></div>
+            <div class="swatch swatch-gold"></div>
+            <div class="swatch swatch-ivory"></div>
+          </div>
+          <p class="stat-note">Inspired by Rolls-Royce cabins and Rolex dials.</p>
+        </div>
+
+        <div class="stat-card">
+          <span class="stat-label">Experience Layer</span>
+          <p class="stat-value">Cards • Tabs • Drawer • Carousel • Modal</p>
+          <p class="stat-note">A quiet, tactile interaction pattern – no unnecessary noise.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT / FOOTER -->
+  <section id="contact" class="section section-deep">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Contact</p>
+      <h2 class="section-title">Arrange a Private Viewing.</h2>
+      <p class="section-copy">
+        Whether this becomes a live museum or stays a concept, the intent is the same:
+        treat time, craft, and memory with respect.
+      </p>
+    </div>
+
+    <div class="contact-grid reveal">
+      <div>
+        <h3 class="contact-heading">Curatorial Enquiries</h3>
+        <p>Email: <a href="mailto:hello@azhareon.museum">hello@azhareon.museum</a></p>
+        <p>Instagram: <span class="pseudo-link">@azhareon_museum</span></p>
+      </div>
+
+      <div>
+        <h3 class="contact-heading">Private Viewing Request</h3>
+        <form id="contactForm" class="contact-form">
+          <div class="form-row">
+            <label for="contactName">Name</label>
+            <input id="contactName" name="name" type="text" required placeholder="Your full name" />
+          </div>
+          <div class="form-row">
+            <label for="contactEmail">Email</label>
+            <input id="contactEmail" name="email" type="email" required placeholder="you@example.com" />
+          </div>
+          <div class="form-row">
+            <label for="contactMessage">Message</label>
+            <textarea
+              id="contactMessage"
+              name="message"
+              rows="4"
+              required
+              placeholder="Tell us what you’d like to explore…"
+            ></textarea>
+          </div>
+          <button type="submit" id="contactSubmit" class="btn-primary">
+            Send Request
+          </button>
+          <p id="contactStatus" class="contact-status"></p>
+        </form>
+      </div>
+    </div>
+
+    <footer class="footer reveal">
+      <span>© <span id="yearSpan"></span> Azhareon Museum. Crafted in code.</span>
+    </footer>
+  </div>
+</section>
+
+  <!-- Detail modal -->
+<div id="detailModal" class="modal-backdrop hidden">
+  <div class="modal-panel">
+    <button id="modalClose" class="modal-close">×</button>
+
+    <p id="modalCategory" class="modal-eyebrow">CATEGORY</p>
+    <h3 id="modalTitle" class="modal-title">Title</h3>
+    <p id="modalEra" class="modal-meta">Era · Origin</p>
+
+    <!-- Image at top of modal -->
+    <div id="modalImageWrap" class="modal-image-wrap" style="display:none;">
+      <img id="modalImage" alt="Collection image" />
+    </div>
+
+    <p id="modalBody" class="modal-body">
+      Description text.
+    </p>
+
+    <div id="modalTags" class="modal-tags"></div>
+  </div>
+</div>
+
+  <script src="/static/script.js?v=1" defer></script>
+
+</body>
+</html>

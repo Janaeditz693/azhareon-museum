@@ -1,0 +1,16 @@
+[
+  {
+    "id": "debug-1",
+    "title": "Debug Collection",
+    "category": "machines",
+    "era": "2025",
+    "origin": "local",
+    "description": "Inserted via PowerShell test",
+    "tags": [
+      "debug"
+    ],
+    "banner": "linear-gradient(135deg,#111,#222)",
+    "badge": "Debug",
+    "image_url": "/uploads/debug.webp"
+  }
+]

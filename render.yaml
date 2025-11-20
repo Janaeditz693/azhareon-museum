@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: azhareon-museum
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn server:app"
+    envVars:
+      - key: MONGO_URL
+        sync: false      # you’ll set this in the dashboard
+      - key: MONGO_DB_NAME
+        value: azhareon
+      - key: SECRET_KEY
+        sync: false
