@@ -26,13 +26,24 @@ app = Flask(
 app.config["UPLOAD_FOLDER"] = UPLOAD_DIR
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
 
-# Mongo connection string:
-#  - Local:  mongodb://localhost:27017
-#  - Render: use MongoDB Atlas and set MONGO_URL in Render dashboard
-MONGO_URL = os.environ.get("MONGO_URL", "mongodb://localhost:27017")
+# ----- Mongo connection -----
+# On Render / production:
+#   set MONGODB_URI in the dashboard with your Atlas connection string.
+# Locally:
+#   you can still use mongodb://localhost:27017 if you have Mongo running.
+
+MONGO_URI = (
+    os.environ.get("MONGODB_URI")  # preferred (Render / Atlas)
+    or os.environ.get("MONGO_URL")  # fallback name if you already set this
+)
+
+if not MONGO_URI:
+    # Local fallback only – avoids trying Atlas when you just run Mongo locally.
+    MONGO_URI = "mongodb://localhost:27017"
+
 MONGO_DB_NAME = os.environ.get("MONGO_DB_NAME", "azhrareon")
 
-mongo_client = MongoClient(MONGO_URL)
+mongo_client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
 db = mongo_client[MONGO_DB_NAME]
 collections_coll = db["collections"]
 contacts_coll = db["contacts"]
@@ -183,6 +194,6 @@ def admin_upload_image():
 # ---------- Main entry for local dev ----------
 
 if __name__ == "__main__":
-    # For local testing only
+    # For local testing only (Render uses gunicorn, not this block)
     port = int(os.environ.get("PORT", 8000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, debug=True)
