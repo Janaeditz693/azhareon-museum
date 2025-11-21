@@ -10,10 +10,16 @@ from flask import (
 )
 from pymongo import MongoClient
 
+# --- ADDED CLOUDINARY IMPORTS ---
+import cloudinary
+import cloudinary.uploader 
+# --- END ADDED CLOUDINARY IMPORTS ---
+
 # ---------- Config ----------
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
+# UPLOAD_DIR is no longer used for permanent storage, but kept for Flask compatibility/local dev
 UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -28,27 +34,33 @@ app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
 
 # ---------- MongoDB: Atlas only in production ----------
 
-# IMPORTANT:
-# On Render, you MUST set this in the dashboard:
-#   MONGO_URL = your Atlas connection string
-#
-# Example (DON'T hard-code this in code, put it in Render env vars):
-#   mongodb+srv://azhareon-user:azhareon12347@cluster.zz7yduf.mongodb.net/?appName=Cluster
-
 MONGO_URL = os.environ.get("MONGO_URL")
 if not MONGO_URL:
-    # Fail fast if Mongo is not configured – avoids silently trying localhost
     raise RuntimeError(
         "MONGO_URL environment variable is required. "
         "Set it to your MongoDB Atlas connection string."
     )
 
-MONGO_DB_NAME = os.environ.get("MONGO_DB_NAME", "azhrareon")
+# CORRECTED: Fallback database name to 'azhareon' (fixed typo)
+MONGO_DB_NAME = os.environ.get("MONGO_DB_NAME", "azhareon")
 
 mongo_client = MongoClient(MONGO_URL)
 db = mongo_client[MONGO_DB_NAME]
 collections_coll = db["collections"]
 contacts_coll = db["contacts"]
+
+# --- ADDED CLOUDINARY CONFIGURATION ---
+try:
+    # Uses CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET from Render Env Vars
+    cloudinary.config(
+      cloud_name = os.environ.get("CLOUDINARY_CLOUD_NAME"), 
+      api_key = os.environ.get("CLOUDINARY_API_KEY"), 
+      api_secret = os.environ.get("CLOUDINARY_API_SECRET")
+    )
+except Exception as e:
+    # This won't stop the app but will prevent file uploads from working if keys are bad
+    print(f"Warning: Cloudinary configuration failed: {e}")
+# --- END CLOUDINARY CONFIGURATION ---
 
 
 # ---------- Helper ----------
@@ -80,7 +92,8 @@ def admin_page():
 
 # ---------- Static uploads (images) ----------
 
-
+# This route is maintained, but it will now only serve files committed to the repo,
+# not user uploads, as they will be served directly from Cloudinary.
 @app.route("/uploads/<path:filename>")
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_DIR, filename)
@@ -168,7 +181,7 @@ def admin_list_contacts():
     return jsonify(docs)
 
 
-# ---------- Admin API: image upload ----------
+# ---------- Admin API: image upload (Rewritten for Cloudinary) ----------
 
 
 @app.route("/api/admin/upload-image", methods=["POST"])
@@ -180,13 +193,23 @@ def admin_upload_image():
     if file.filename == "":
         return jsonify({"detail": "no file selected"}), 400
 
-    # Use a random filename to avoid clashes
-    ext = os.path.splitext(file.filename)[1].lower()
-    filename = f"{uuid.uuid4().hex}{ext}"
-    save_path = os.path.join(UPLOAD_DIR, filename)
-    file.save(save_path)
+    # --- NEW: Upload directly to Cloudinary ---
+    try:
+        # The file object is passed directly to the uploader
+        upload_result = cloudinary.uploader.upload(
+            file, 
+            folder="azhareon-museum",  # Organizes files in a dedicated folder
+            resource_type="image"
+        )
+        # We save the permanent, public URL returned by Cloudinary
+        url = upload_result['secure_url']
+    except Exception as e:
+        # If Cloudinary setup failed, this is where it will be caught
+        print(f"Cloudinary upload failed: {e}")
+        return jsonify({"detail": f"Upload failed: {e}"}), 500
 
-    url = f"/uploads/{filename}"
+    # --- OLD local file saving logic REMOVED here ---
+
     return jsonify({"ok": True, "url": url}), 201
 
 
