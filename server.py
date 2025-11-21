@@ -26,24 +26,26 @@ app = Flask(
 app.config["UPLOAD_FOLDER"] = UPLOAD_DIR
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret-key")
 
-# ----- Mongo connection -----
-# On Render / production:
-#   set MONGODB_URI in the dashboard with your Atlas connection string.
-# Locally:
-#   you can still use mongodb://localhost:27017 if you have Mongo running.
+# ---------- MongoDB: Atlas only in production ----------
 
-MONGO_URI = (
-    os.environ.get("MONGODB_URI")  # preferred (Render / Atlas)
-    or os.environ.get("MONGO_URL")  # fallback name if you already set this
-)
+# IMPORTANT:
+# On Render, you MUST set this in the dashboard:
+#   MONGO_URL = your Atlas connection string
+#
+# Example (DON'T hard-code this in code, put it in Render env vars):
+#   mongodb+srv://azhareon-user:azhareon12347@cluster.zz7yduf.mongodb.net/?appName=Cluster
 
-if not MONGO_URI:
-    # Local fallback only – avoids trying Atlas when you just run Mongo locally.
-    MONGO_URI = "mongodb://localhost:27017"
+MONGO_URL = os.environ.get("MONGO_URL")
+if not MONGO_URL:
+    # Fail fast if Mongo is not configured – avoids silently trying localhost
+    raise RuntimeError(
+        "MONGO_URL environment variable is required. "
+        "Set it to your MongoDB Atlas connection string."
+    )
 
 MONGO_DB_NAME = os.environ.get("MONGO_DB_NAME", "azhrareon")
 
-mongo_client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+mongo_client = MongoClient(MONGO_URL)
 db = mongo_client[MONGO_DB_NAME]
 collections_coll = db["collections"]
 contacts_coll = db["contacts"]
@@ -102,10 +104,7 @@ def api_contact():
     message = (data.get("message") or "").strip()
 
     if not (name and email and message):
-        return (
-            jsonify({"detail": "name, email and message are required"}),
-            400,
-        )
+        return jsonify({"detail": "name, email and message are required"}), 400
 
     doc = {
         "name": name,
@@ -194,6 +193,7 @@ def admin_upload_image():
 # ---------- Main entry for local dev ----------
 
 if __name__ == "__main__":
-    # For local testing only (Render uses gunicorn, not this block)
+    # For local testing only; Render uses gunicorn and ignores this block
     port = int(os.environ.get("PORT", 8000))
     app.run(host="0.0.0.0", port=port, debug=True)
+# ---------- End of file ----------
